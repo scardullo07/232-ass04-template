@@ -192,7 +192,7 @@ void test_addFirst_non_empty(void)
     Node *node2 = createNode(2);
     addFirst(&head, node1);
     addFirst(&head, node2);
-    TEST_ASSERT_TRUE_MESSAGE(head == node2 && head->nextPtr == n1, "nextPtr should point to second node.");
+    TEST_ASSERT_TRUE_MESSAGE(head == node2 && head->nextPtr == node1, "nextPtr should point to second node.");
     destroyList(&head);
 }
 
