@@ -119,7 +119,7 @@ void test_createNode_not_null(void)
 void test_createNode_value(void)
 {
     Node *node = createNode(3);
-    TEST_ASSERT_TRUE_MESSAGE(node != NULL && node->value == 10, "node value should match value in createNode");
+    TEST_ASSERT_TRUE_MESSAGE(node != NULL && node->value == 3, "node value should match value in createNode");
     destroyNode(&node);
 }
 
