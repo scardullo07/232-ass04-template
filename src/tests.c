@@ -529,7 +529,7 @@ void test_destroyList_empties_list(void)
 void test_listLength_empty(void)
 {
     int length = listLength(NULL);
-    TEST_ASSERT_TRUE_MESSAGE(lenth == 0, "Length of empty list should be 0.");
+    TEST_ASSERT_TRUE_MESSAGE(length == 0, "Length of empty list should be 0.");
 }
 
 
