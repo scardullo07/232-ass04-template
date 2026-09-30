@@ -122,8 +122,8 @@ static Node* _findFirst(Node *headPtr)
 
 static Node* _findLast(Node *headPtr)
 {
-    if(headptr == NULL){
-        return NULL
+    if(headPtr == NULL){
+        return NULL;
     }
     
     Node *currentPtr = headPtr;
@@ -214,7 +214,7 @@ Node* createNode(int value)
     Node *newNodePtr = (Node *) malloc(sizeof(Node));
     if(newNodePtr == NULL){
         fprintf(stderr, "Error: malloc failed.\n");
-        return NULL
+        return NULL;
     }
     initNode(newNodePtr, value);
     return newNodePtr;
@@ -238,7 +238,7 @@ Node* createNode(int value)
 
 void destroyNode(Node **nodePtrPtr)
 {
-    if(nodePtrPtr == NULL || *nodePtrPtr == NUll){
+    if(nodePtrPtr == NULL || *nodePtrPtr == NULL){
         return;
     }
     free(*nodePtrPtr);
@@ -276,7 +276,7 @@ int addFirst(Node **headPtrPtr, Node *newNodePtr)
         fprintf(stderr, "Error: newNodePtr is NULL.\n");
         return -1;
     }
-    newNodePtr-nextPtr = *headPtrPtr;
+    newNodePtr->nextPtr = *headPtrPtr;
     *headPtrPtr = newNodePtr;
     return 0;
 }
@@ -373,23 +373,24 @@ Node* detachFirst(Node **headPtrPtr)
 
 Node* detachLast(Node **headPtrPtr)
 {
-    if(headPtrPtr == NULL || *headPtrPtr == NULL){
+    if (headPtrPtr == NULL || *headPtrPtr == NULL) {
         return NULL;
     }
 
-    if((*headPtrPtr->nextPtr == NULL)){
+    if ((*headPtrPtr)->nextPtr == NULL) {
         return detachFirst(headPtrPtr);
     }
 
+    Node *lastNode = _findLast(*headPtrPtr);
+
     Node *currentPtr = *headPtrPtr;
-    while(currentPtr->nextPtr->nextPtr != NULL){
+    while (currentPtr->nextPtr != lastNode) {
         currentPtr = currentPtr->nextPtr;
     }
 
-    Node *detachedNode = currentPtr->nextPtr;
     _nullify(&(currentPtr->nextPtr));
-    _nullify(&(detachedNode->nextPtr));
-    return detachedNode;
+    _nullify(&(lastNode->nextPtr));
+    return lastNode;
 }
 
 
@@ -567,7 +568,7 @@ int printList(Node *headPtr)
 {
     if(headPtr == NULL){
         printf("Empty List\n");
-        return -1
+        return -1;
     }
 
     Node *currentPtr = headPtr;
