@@ -552,7 +552,7 @@ void test_listLength_three(void)
     addLast(&head, n2);
     addLast(&head, n3);
 
-    int lenth = listLength(head);
+    int length = listLength(head);
     TEST_ASSERT_TRUE_MESSAGE(length == 3, "List length should be three.");
     destroyList(&head);
 }
