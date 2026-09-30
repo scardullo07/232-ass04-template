@@ -1,9 +1,9 @@
-//char *AUTHOR_NAME        = (char *) "Your Name";
-//char *AUTHOR_AUTHORSHIP  = (char *) "I acknowledge that I have worked on this
-// assignment independently, except where explicitly noted and referenced.
-// Any collaboration or use of external resources has been properly cited.
-// I am fully aware of the consequences of academic dishonesty and agree to
-// abide by the university's academic integrity policy.";
+char *AUTHOR_NAME        = (char *) "Sebastian Cardullo";
+char *AUTHOR_AUTHORSHIP  = (char *) "I acknowledge that I have worked on this
+assignment independently, except where explicitly noted and referenced.
+Any collaboration or use of external resources has been properly cited.
+I am fully aware of the consequences of academic dishonesty and agree to
+abide by the university's academic integrity policy.";
 
 
 #include <stdio.h>
@@ -80,7 +80,9 @@ int   listLength  (Node *headPtr);
 
 static void _nullify(Node **nodePtrPtr)
 {
-    // TODO
+    if (nodePtrPtr != NULL){
+        *nodePtrPtr = NULL;
+    }
 }
 
 
@@ -98,8 +100,7 @@ static void _nullify(Node **nodePtrPtr)
 
 static Node* _findFirst(Node *headPtr)
 {
-    // TODO
-    return NULL;
+    return headptr;
 }
 
 
@@ -121,8 +122,15 @@ static Node* _findFirst(Node *headPtr)
 
 static Node* _findLast(Node *headPtr)
 {
-    // TODO
-    return NULL;
+    if(headptr == NULL){
+        return NULL
+    }
+    
+    Node *currentPtr = headPtr;
+    while(currentPtr->nextPtr != NULL){
+        currentPtr = currentPtr->nextPtr
+    }
+    return currentPtr;
 }
 
 
@@ -144,11 +152,15 @@ static Node* _findLast(Node *headPtr)
 
 static Node* _findValue(Node *headPtr, int value)
 {
-    // TODO
+    Node *currentPtr = headPtr;
+    while(currentPtr != NULL){
+        if(currentPtr->value == value){
+            return currentPtr
+        }
+        currentPtr = currentPtr->nextPtr
+    }
     return NULL;
 }
-
-
 // ════════════════════════════════════════════════════════════
 //  PUBLIC IMPLEMENTATIONS
 //  These are the functions students and tests call directly.
@@ -173,13 +185,16 @@ static Node* _findValue(Node *headPtr, int value)
 
 void initNode(Node *nodePtr, int value)
 {
-    // TODO
+    if(nodePtr == NULL){
+        return;
+    }
+    nodePtr->value = value;
+    nodePtr->nextPtr = NULL;
 }
 
 
 // ============================================================
 // createNode
-//
 // Allocate a NEW node on the heap using malloc.
 // Initialize it by calling initNode.
 // Return a pointer to the new node.
@@ -196,8 +211,13 @@ void initNode(Node *nodePtr, int value)
 
 Node* createNode(int value)
 {
-    // TODO
-    return NULL;
+    Node *newNodePtr = (Node *) malloc(sizeof(Node));
+    if(newNodePtr == NULL){
+        fprintf(stderr, "Error: malloc failed.\n")
+        return NULL
+    }
+    initNode(newNodePtr, value);
+    return newNodePtr;
 }
 
 
@@ -218,7 +238,11 @@ Node* createNode(int value)
 
 void destroyNode(Node **nodePtrPtr)
 {
-    // TODO
+    if(nodePtrPtr == NULL || *nodePtrPtr == NUll){
+        return;
+    }
+    free(*nodePtrPtr);
+    _nullify(nodePtrPtr);
 }
 
 
@@ -244,8 +268,17 @@ void destroyNode(Node **nodePtrPtr)
 
 int addFirst(Node **headPtrPtr, Node *newNodePtr)
 {
-    // TODO
-    return -1;
+    if(headPtrPtr == NULL){
+        fprintf(stderr, "Error: headPtrPtr is NULL.\n")
+        return -1;
+    }
+    if(newNodePtr == NULL){
+        fprintf(stderr, "Error: newNodePtr is NULL.\n")
+        return -1;
+    }
+    newNodePtr-nextPtr = *headPtrPtr;
+    *headPtrPtr = newNodePtr;
+    return 0;
 }
 
 
@@ -270,8 +303,23 @@ int addFirst(Node **headPtrPtr, Node *newNodePtr)
 
 int addLast(Node **headPtrPtr, Node *newNodePtr)
 {
-    // TODO
-    return -1;
+    if(headPtrPtr == NULL){
+        fprintf(stderr, "Error: headPtrPtr is NULL.\n")
+        return -1;
+    }
+    if(newNodePtr == NULL){
+        fprintf(stderr, "Error: newNodePtr is NULL.\n")
+        return -1;
+    }
+
+    newNodePtr->nextPtr = NULL;
+    if(*headPtrPtr == NULL){
+        *headPtrPtr = newNodePtr;
+    }else{
+        Node *lastNode = _findLast(*headPtrPtr);
+        lastNode->nextPtr = newNodePtr;
+    }
+    return 0;
 }
 
 
@@ -295,8 +343,14 @@ int addLast(Node **headPtrPtr, Node *newNodePtr)
 
 Node* detachFirst(Node **headPtrPtr)
 {
-    // TODO
-    return NULL;
+    if(headPtrPtr == NULL || *headPtrPtr == NULL){
+        return NULL;
+    }
+    
+    Node *detachedNode = _findFirst(*headPtrPtr);
+    *headPtrPtr = detachedNode->nextPtr;
+    _nullify(&(detachedNode->nextPtr));
+    return detachedNode;
 }
 
 
@@ -319,8 +373,23 @@ Node* detachFirst(Node **headPtrPtr)
 
 Node* detachLast(Node **headPtrPtr)
 {
-    // TODO
-    return NULL;
+    if(headPtrPtr == NULL || *headPtrPtr == NULL){
+        return NULL;
+    }
+
+    if((*headPtrPtr->nextPtr == NULL)){
+        return detachFirst(headPtrPtr);
+    }
+
+    Node *currentPtr = *headPtrPtr;
+    while(currentPtr->nextPtr->nextPtr != NULL){
+        currentPtr = currentPtr->nextPtr;
+    }
+
+    Node *detachedNode = currentPtr->nextPtr;
+    _nullify(&(currentPtr->nextPtr));
+    _nullify(&(detachedNode->nextPtr));
+    return detachedNode;
 }
 
 
@@ -344,8 +413,28 @@ Node* detachLast(Node **headPtrPtr)
 
 Node* detachValue(Node **headPtrPtr, int value)
 {
-    // TODO
-    return NULL;
+    if(headPtrPtr == NULL || *headPtrPtr == NULL){
+        fprintf(stderr, "Error: value not found.\n");
+        return NULL;
+    }
+    if((*headPtrPtr)->value == value){
+        return detachFirst(headPtrPtr);
+    }
+
+    Node *currentPtr = *headPtrPtr;
+    while(currentPtr->nextPtr != NULL && currentPtr->nextPtr->value != value){
+        currentPtr = currentPtr->nextPtr;
+    }
+
+    if(currentPtr->nextPtr == NULL){
+        fprintf(stderr, "Error: value not found.\n");
+        return NULL;
+    }
+
+    Node *detachedNode = currentPtr->nextPtr;
+    currentPtr->nextPtr = detachedNode->nextPtr;
+    _nullify(&(detachedNode->nextPtr));
+    return detachedNode;
 }
 
 
@@ -367,8 +456,13 @@ Node* detachValue(Node **headPtrPtr, int value)
 
 int deleteFirst(Node **headPtrPtr)
 {
-    // TODO
-    return -1;
+    if(headPtrPtr == NULL || *headPtrPtr == NULL){
+        return -1;
+    }
+
+    Node *firstNode = detachFirst(headPtrPtr);
+    destroyNode(&firstNode);
+    return 0;
 }
 
 
@@ -390,8 +484,13 @@ int deleteFirst(Node **headPtrPtr)
 
 int deleteLast(Node **headPtrPtr)
 {
-    // TODO
-    return -1;
+    if(headPtrPtr == NULL || *headPtrPtr == NULL){
+        return -1;
+    }
+
+    Node *lastNode = detachLast(headPtrPtr);
+    destroyNode(&lastNode);
+    return 0;
 }
 
 
@@ -413,8 +512,13 @@ int deleteLast(Node **headPtrPtr)
 
 int deleteValue(Node **headPtrPtr, int value)
 {
-    // TODO
-    return -1;
+    if(headPtrPtr == NULL || *headPtrPtr == NULL){
+        return -1;
+    }
+
+    Node *nodeValue = detachValue(headPtrPtr, value);
+    destroyNode(&nodeValue);
+    return 0;
 }
 
 
@@ -436,7 +540,13 @@ int deleteValue(Node **headPtrPtr, int value)
 
 void destroyList(Node **headPtrPtr)
 {
-    // TODO
+    if(headPtrPtr == NULL){
+        return;
+    }
+
+    while(*headPtrPtr != NULL){
+        deleteFirst(headPtrPtr);
+    }
 }
 
 
@@ -451,8 +561,17 @@ void destroyList(Node **headPtrPtr)
 
 int printList(Node *headPtr)
 {
-    // TODO
-    return -1;
+    if(headPtr == NULL){
+        printf("Empty List\n");
+        return -1
+    }
+
+    Node *currentPtr = headPtr;
+    while(currentPtr != NULL){
+        printf("%d\n", currentPtr->value);
+        currentPtr = currentPtr->nextPtr;
+    }
+    return 0;
 }
 
 
@@ -465,6 +584,11 @@ int printList(Node *headPtr)
 
 int listLength(Node *headPtr)
 {
-    // TODO
-    return 0;
+    int length = 0;
+    Node *currentPtr = headPtr;
+    while(currentPtr != NULL){
+        length++;
+        currentPtr = currentPtr->nextPtr;
+    }
+    return length;
 }
