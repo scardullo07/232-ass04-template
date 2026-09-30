@@ -100,7 +100,7 @@ static void _nullify(Node **nodePtrPtr)
 
 static Node* _findFirst(Node *headPtr)
 {
-    return headptr;
+    return headPtr;
 }
 
 
@@ -128,7 +128,7 @@ static Node* _findLast(Node *headPtr)
     
     Node *currentPtr = headPtr;
     while(currentPtr->nextPtr != NULL){
-        currentPtr = currentPtr->nextPtr
+        currentPtr = currentPtr->nextPtr;
     }
     return currentPtr;
 }
@@ -155,9 +155,9 @@ static Node* _findValue(Node *headPtr, int value)
     Node *currentPtr = headPtr;
     while(currentPtr != NULL){
         if(currentPtr->value == value){
-            return currentPtr
+            return currentPtr;
         }
-        currentPtr = currentPtr->nextPtr
+        currentPtr = currentPtr->nextPtr;
     }
     return NULL;
 }
@@ -213,7 +213,7 @@ Node* createNode(int value)
 {
     Node *newNodePtr = (Node *) malloc(sizeof(Node));
     if(newNodePtr == NULL){
-        fprintf(stderr, "Error: malloc failed.\n")
+        fprintf(stderr, "Error: malloc failed.\n");
         return NULL
     }
     initNode(newNodePtr, value);
@@ -269,11 +269,11 @@ void destroyNode(Node **nodePtrPtr)
 int addFirst(Node **headPtrPtr, Node *newNodePtr)
 {
     if(headPtrPtr == NULL){
-        fprintf(stderr, "Error: headPtrPtr is NULL.\n")
+        fprintf(stderr, "Error: headPtrPtr is NULL.\n");
         return -1;
     }
     if(newNodePtr == NULL){
-        fprintf(stderr, "Error: newNodePtr is NULL.\n")
+        fprintf(stderr, "Error: newNodePtr is NULL.\n");
         return -1;
     }
     newNodePtr-nextPtr = *headPtrPtr;
@@ -304,11 +304,11 @@ int addFirst(Node **headPtrPtr, Node *newNodePtr)
 int addLast(Node **headPtrPtr, Node *newNodePtr)
 {
     if(headPtrPtr == NULL){
-        fprintf(stderr, "Error: headPtrPtr is NULL.\n")
+        fprintf(stderr, "Error: headPtrPtr is NULL.\n");
         return -1;
     }
     if(newNodePtr == NULL){
-        fprintf(stderr, "Error: newNodePtr is NULL.\n")
+        fprintf(stderr, "Error: newNodePtr is NULL.\n");
         return -1;
     }
 
