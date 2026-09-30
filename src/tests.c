@@ -171,7 +171,7 @@ void test_addFirst_empty_list(void)
     Node *newNode = createNode(3);
     addFirst(&head, newNode);
     TEST_ASSERT_TRUE_MESSAGE(head == newNode, "Head should point to new added node.");
-    deatroyList(&head);
+    destroyList(&head);
 }
 
 
