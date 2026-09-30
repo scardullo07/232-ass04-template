@@ -522,6 +522,11 @@ int deleteValue(Node **headPtrPtr, int value)
     }
 
     Node *nodeValue = detachValue(headPtrPtr, value);
+
+    if(nodeValue == NULL){
+        return -1;
+    }
+
     destroyNode(&nodeValue);
     return 0;
 }
