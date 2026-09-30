@@ -417,24 +417,28 @@ Node* detachValue(Node **headPtrPtr, int value)
         fprintf(stderr, "Error: value not found.\n");
         return NULL;
     }
-    if((*headPtrPtr)->value == value){
-        return detachFirst(headPtrPtr);
-    }
-
-    Node *currentPtr = *headPtrPtr;
-    while(currentPtr->nextPtr != NULL && currentPtr->nextPtr->value != value){
-        currentPtr = currentPtr->nextPtr;
-    }
-
-    if(currentPtr->nextPtr == NULL){
-        fprintf(stderr, "Error: value not found.\n");
+    
+    Node *targetNode = _findValue(*headPtrPtr, value);
+    if (targetNode == NULL) {
+        fprintf(stderr, "Warning: value %d not found in detachValue\n", value);
         return NULL;
     }
 
-    Node *detachedNode = currentPtr->nextPtr;
-    currentPtr->nextPtr = detachedNode->nextPtr;
-    _nullify(&(detachedNode->nextPtr));
-    return detachedNode;
+    // Special case: matching node is the head
+    if (*headPtrPtr == targetNode) {
+        return detachFirst(headPtrPtr);
+    }
+
+    // Traverse to the node immediately preceding targetNode
+    Node *currentPtr = *headPtrPtr;
+    while (currentPtr->nextPtr != targetNode) {
+        currentPtr = currentPtr->nextPtr;
+    }
+
+    // Splice out the target node
+    currentPtr->nextPtr = targetNode->nextPtr;
+    _nullify(&(targetNode->nextPtr));
+    return targetNode;
 }
 
 
